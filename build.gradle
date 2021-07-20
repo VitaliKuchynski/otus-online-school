@@ -1,18 +1,41 @@
 plugins {
-    id 'java'
+    id 'idea'
+    id 'org.springframework.boot' version '2.4.0'
+    // Build uber-jar
+    id 'com.github.johnrengelman.shadow' version '6.1.0' apply false
+
 }
 
-group 'org.example'
+idea {
+    project {
+        languageLevel = 15
+    }
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
+group 'org.online.school'
 version '1.0-SNAPSHOT'
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
+apply plugin: 'java'
+apply plugin: 'io.spring.dependency-management'
+
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
-}
+    implementation('org.springframework.boot:spring-boot-starter-web')
+    implementation('org.springframework.boot:spring-boot-starter-data-jpa')
+    implementation ('org.springframework.boot:spring-boot-starter-data-jdbc')
+    implementation('org.springframework.boot:spring-boot-starter-web')
+    implementation('org.flywaydb:flyway-core')
+    implementation('org.postgresql:postgresql')
+    }
+
+
 
 test {
     useJUnitPlatform()

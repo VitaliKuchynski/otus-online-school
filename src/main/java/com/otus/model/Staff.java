@@ -1,19 +1,25 @@
 package com.otus.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
+
 
 @Entity
-@Table(name = "students")
-public class Student {
+@Table(name = "staff")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
+public class Staff {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
-    @Column(unique = true)
+
     private String email;
 
     private String address;
@@ -21,40 +27,21 @@ public class Student {
     private String phone;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinTable(name = "students_courses",
+    @JoinTable(name = "staff_roles",
             joinColumns = {
-                    @JoinColumn(name = "student_id", referencedColumnName = "id",
+                    @JoinColumn(name = "staff_id", referencedColumnName = "id",
                             nullable = false, updatable = false)},
             inverseJoinColumns = {
-                    @JoinColumn(name = "course_id", referencedColumnName = "id",
+                    @JoinColumn(name = "roles_id", referencedColumnName = "id",
                             nullable = false, updatable = false)})
-    private Set<Course> courses = new HashSet<>();
+    private List<Role> roles;
 
-
-    public Student(String name, String email, String address, String phone) {
-        this.name = name;
-        this.email = email;
-        this.address = address;
-        this.phone = phone;
+    public List<Role> getRoles() {
+        return roles;
     }
 
-    public Student() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 
     public String getEmail() {
@@ -81,21 +68,25 @@ public class Student {
         this.phone = phone;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
 
-    public Set<Course> getCourses() {
-        return courses;
+    public String getName() {
+        return name;
     }
 
-    public void setCourses(Set<Course> courses) {
-        this.courses = courses;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
     public String toString() {
-        return "Student{" +
+        return "Staff{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +

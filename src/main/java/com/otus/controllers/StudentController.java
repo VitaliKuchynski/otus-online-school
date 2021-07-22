@@ -21,8 +21,8 @@ public class StudentController {
     }
 
 
-    @PostMapping(value = "/save", consumes = "application/json", produces = "application/json")
-    public Student studentSave(@RequestBody Student student) {
+    @PostMapping(value = "/create", consumes = "application/json", produces = "application/json")
+    public Student createStudent(@RequestBody Student student) {
         dbStudentService.saveStudent(student);
         return student; //new RedirectView("/", true);
     }

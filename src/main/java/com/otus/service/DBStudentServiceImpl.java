@@ -5,6 +5,7 @@ import com.otus.repository.StudentRepository;
 import com.otus.sessionManager.TransactionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -27,8 +28,11 @@ public class DBStudentServiceImpl implements DBStudentService {
     @Override
     public Student saveStudent(Student student) {
         return transactionManager.doInTransaction(() -> {
+            if(studentRepository.findByEmail(student.getEmail()).isPresent()){
+                throw new RuntimeException("Student already registered");
+            }
             var savedStudent = studentRepository.save(student);
-            //log.info("saved client: {}", savedStudent);
+            log.info("saved client: {}", savedStudent);
             return savedStudent;
         });
     }

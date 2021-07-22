@@ -1,9 +1,7 @@
 package com.otus.model;
 
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -11,9 +9,6 @@ import java.util.Set;
 
 @Entity
 @Table(name = "courses")
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
 public class Course {
 
     @Id
@@ -23,6 +18,7 @@ public class Course {
     private String name;
 
     @ManyToMany(mappedBy = "courses", fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<Student> students = new HashSet<>();
 
     public Course(String name) {

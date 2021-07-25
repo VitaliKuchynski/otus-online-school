@@ -1,11 +1,11 @@
 package com.otus.service;
 
 import com.otus.model.Student;
+import com.otus.repository.CourseRepository;
 import com.otus.repository.StudentRepository;
 import com.otus.sessionManager.TransactionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,10 +19,12 @@ public class DBStudentServiceImpl implements DBStudentService {
 
     private final TransactionManager transactionManager;
     private final StudentRepository studentRepository;
+    private final CourseRepository courseRepository;
 
-    public DBStudentServiceImpl(TransactionManager transactionManager, StudentRepository studentRepository) {
+    public DBStudentServiceImpl(TransactionManager transactionManager, StudentRepository studentRepository, CourseRepository courseRepository) {
         this.transactionManager = transactionManager;
         this.studentRepository = studentRepository;
+        this.courseRepository = courseRepository;
     }
 
     @Override
@@ -50,5 +52,21 @@ public class DBStudentServiceImpl implements DBStudentService {
         studentRepository.findAll().forEach(studentList::add);
         log.info("studentList: {}", studentList);
         return studentList;
+    }
+
+    @Override
+    public Student assignCourse(Long studentId, Long courseId) {
+
+        var getCourse = courseRepository.findById(courseId)
+                .orElseThrow(()-> new RuntimeException("course not found " + courseId));
+
+        var student = studentRepository.findById(studentId)
+                .orElseThrow(()-> new RuntimeException("student not found " + studentId));
+
+        var course = student.getCourses();
+        course.add(getCourse);
+        student.setCourses(course);
+
+        return studentRepository.save(student);
     }
 }

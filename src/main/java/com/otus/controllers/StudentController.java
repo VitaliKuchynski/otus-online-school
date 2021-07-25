@@ -5,6 +5,7 @@ import com.otus.service.DBCourseService;
 import com.otus.service.DBStudentService;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.util.List;
 
 @RestController
@@ -24,7 +25,7 @@ public class StudentController {
     @PostMapping(value = "/create", consumes = "application/json", produces = "application/json")
     public Student createStudent(@RequestBody Student student) {
         dbStudentService.saveStudent(student);
-        return student; //new RedirectView("/", true);
+        return student;
     }
 
     @GetMapping("/{id}")
@@ -39,12 +40,8 @@ public class StudentController {
     }
 
 
-    @PostMapping(value = "/createStudent/{id}", consumes = "application/json", produces = "application/json")
-    public Student assignCourse(@RequestBody Student student, @PathVariable(name = "id") long id) {
-
-        var getCourse = dbCourseService.getCourse(id)
-                .orElseThrow(()-> new RuntimeException("course not found " + id));
-            student.getCourses().add(getCourse);
-            return dbStudentService.saveStudent(student);
+    @PostMapping(value = "/assign/course", consumes = "application/json", produces = "application/json")
+    public Student assignCourse(@RequestParam (name = "studentId") Long studentId, @RequestParam (name = "courseId") Long courseId) {
+        return dbStudentService.assignCourse(studentId, courseId);
 }
 }

@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -36,5 +38,13 @@ public class DBPaymentServiceImpl implements DBPaymentsService {
         var payment = paymentRepository.findById(id);
         log.info("payment: {}", payment);
         return payment;
+    }
+
+    @Override
+    public List<Payment> findAll() {
+        var paymentList = new ArrayList<Payment>();
+        paymentRepository.findAll().forEach(paymentList::add);
+        log.info("paymentList: {} ", paymentList);
+        return paymentList;
     }
 }

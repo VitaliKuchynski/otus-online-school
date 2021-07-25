@@ -1,8 +1,7 @@
 package com.otus.controllers;
 
 import com.otus.model.Role;
-import com.otus.model.Student;
-import com.otus.service.DBRoleServiceImpl;
+import com.otus.service.DBRoleService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,16 +12,16 @@ import java.util.List;
 @RequestMapping("/api/role")
 public class RoleController {
 
-    private DBRoleServiceImpl dbRoleService;
+    private DBRoleService dbRoleService;
 
-    public RoleController(DBRoleServiceImpl dbRoleService) {
+    public RoleController(DBRoleService dbRoleService) {
         this.dbRoleService = dbRoleService;
     }
 
     @PostMapping(value = "/create", consumes = "application/json", produces = "application/json")
     public Role createRole(@RequestBody Role role) {
-        dbRoleService.saveRole(role);
-        return role;
+        var savedRole = dbRoleService.saveRole(role);
+        return savedRole;
     }
 
     @GetMapping("/{id}")

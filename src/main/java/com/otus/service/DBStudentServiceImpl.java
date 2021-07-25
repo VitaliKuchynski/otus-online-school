@@ -29,7 +29,7 @@ public class DBStudentServiceImpl implements DBStudentService {
     public Student saveStudent(Student student) {
         return transactionManager.doInTransaction(() -> {
             if(studentRepository.findByEmail(student.getEmail()).isPresent()){
-                throw new RuntimeException("Student already registered");
+                throw new RuntimeException("Student with the same email already registered");
             }
             var savedStudent = studentRepository.save(student);
             log.info("saved client: {}", savedStudent);

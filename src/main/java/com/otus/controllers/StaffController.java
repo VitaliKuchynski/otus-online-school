@@ -1,6 +1,7 @@
 package com.otus.controllers;
 
 import com.otus.model.Course;
+import com.otus.model.Role;
 import com.otus.model.Staff;
 import com.otus.service.DBStaffService;
 import org.springframework.web.bind.annotation.*;
@@ -18,8 +19,8 @@ public class StaffController {
     }
 
     @PostMapping(value = "save",consumes = "application/json", produces = "application/json")
-    public Staff saveEmployee(@RequestBody Staff employee) {
-        dbStaffService.saveEmployee(employee);
+    public Staff saveEmployee(@RequestBody Staff employee, @RequestParam(name = "roleID") Long roleId) {
+        dbStaffService.saveEmployee(employee, roleId);
         return employee;
     }
 
@@ -34,5 +35,8 @@ public class StaffController {
         return dbStaffService.findAll();
     }
 
-
+    @PostMapping(value = "assign/role",consumes = "application/json", produces = "application/json")
+    public Staff saveEmployee(@RequestParam(name = "employeeId")Long employeeId, @RequestParam(name = "roleID") Long roleId) {
+        return dbStaffService.assignRole(employeeId,roleId);
+    }
 }

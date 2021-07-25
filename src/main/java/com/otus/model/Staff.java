@@ -20,6 +20,7 @@ public class Staff {
 
     private String name;
 
+    @Column(unique = true)
     private String email;
 
     private String address;

@@ -33,7 +33,10 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-web')
     implementation('org.flywaydb:flyway-core')
     implementation('org.postgresql:postgresql')
-    }
+    // https://mvnrepository.com/artifact/javax.persistence/javax.persistence-api
+    implementation 'javax.persistence:javax.persistence-api:2.2'
+
+}
 
 
 

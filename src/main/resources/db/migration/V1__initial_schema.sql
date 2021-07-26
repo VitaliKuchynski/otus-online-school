@@ -15,6 +15,7 @@ create table students_courses (
     course_id bigint,
     student_id bigint
 );
+
 create table roles (
      id bigserial primary key,
      name varchar(100) not null
@@ -34,7 +35,7 @@ create table staff (
     phone varchar (100) not null
 );
 
--- insert into staff values (1, 'Valera');
+insert into staff values (1, 'Valera_Admin');
 
 create table staff_roles (
     staff_id bigint,

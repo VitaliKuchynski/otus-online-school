@@ -21,6 +21,8 @@ public class Student {
 
     private String phone;
 
+    private String cardNumber;
+
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinTable(name = "students_courses",
             joinColumns = {
@@ -92,6 +94,14 @@ public class Student {
 
     public void setCourses(Set<Course> courses) {
         this.courses = courses;
+    }
+
+    public String getCardNumber() {
+        return cardNumber;
+    }
+
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
     }
 
     @Override

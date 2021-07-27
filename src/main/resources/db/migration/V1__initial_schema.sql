@@ -35,7 +35,7 @@ create table staff (
     phone varchar (100) not null
 );
 
-insert into staff values (1, 'Valera_Admin');
+insert into staff values (1, 'Valera_Admin', 'vradmin@gmail.com', 'Big street', '2656412452' );
 
 create table staff_roles (
     staff_id bigint,

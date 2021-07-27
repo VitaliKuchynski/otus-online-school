@@ -28,9 +28,10 @@ create table staff (
     name varchar(100) not null,
     email varchar (100) not null,
     address varchar (100) not null,
-    phone varchar (100) not null
+    phone varchar (100) not null,
+    password varchar (100) not null
 );
-insert into staff values (1, 'Valera_Admin', 'vradmin@gmail.com', 'Big street', '2656412452' );
+insert into staff values (1, 'Valera_Admin', 'vradmin@gmail.com', 'Big street', '2656412452', '123' );
 
 CREATE SEQUENCE hibernate_sequence START 2;
 

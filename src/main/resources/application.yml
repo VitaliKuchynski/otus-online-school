@@ -4,3 +4,8 @@ app:
       jdbcUrl: jdbc:postgresql://localhost:5430/postgresDB
       username: usr
       password: pwd
+
+#spring:
+#  security:
+#    user:
+#      password: 123

@@ -1,20 +1,22 @@
 package com.otus.service;
 
+import com.otus.model.Role;
 import com.otus.model.Staff;
 import com.otus.repository.RoleRepository;
 import com.otus.repository.StaffRepository;
 import com.otus.sessionManager.TransactionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
-public class DBStaffServiceImpl implements DBStaffService{
+public class DBStaffServiceImpl implements DBStaffService, UserDetailsService {
 
     private static final Logger log = LoggerFactory.getLogger(DBStaffServiceImpl.class);
 
@@ -28,6 +30,24 @@ public class DBStaffServiceImpl implements DBStaffService{
         this.staffRepository = staffRepository;
         this.roleRepository = roleRepository;
     }
+
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+
+        Staff employee = staffRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("employee not found " + email));
+       // var role = roleRepository.findById().orElseThrow(()-> new RuntimeException("role not found " + roleId));
+
+        Collection<SimpleGrantedAuthority> authorityCollections = new ArrayList<>();
+        var roles = employee.getRoles();
+
+        for (Role role: roles) {
+            var roleById = roleRepository.findById(role.getId()).orElseThrow(()-> new RuntimeException("role not found " + role.getId()));
+            authorityCollections.add(new SimpleGrantedAuthority(roleById.getName()));
+        }
+        return new org.springframework.security.core.userdetails.User(employee.getEmail(), employee.getPassword(), authorityCollections);
+    }
+
 
     @Override
     public Staff saveEmployee(Staff staff, Long roleId) {

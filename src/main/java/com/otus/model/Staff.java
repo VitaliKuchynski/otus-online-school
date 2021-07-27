@@ -27,6 +27,8 @@ public class Staff {
 
     private String phone;
 
+    private String password;
+
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinTable(name = "staff_roles",
             joinColumns = {
@@ -36,6 +38,14 @@ public class Staff {
                     @JoinColumn(name = "roles_id", referencedColumnName = "id",
                             nullable = false, updatable = false)})
     private List<Role> roles;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public List<Role> getRoles() {
         return roles;

@@ -18,9 +18,11 @@ public class Staff {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
+    @Column(unique = true)
+    private String userName;
+
     private String name;
 
-    @Column(unique = true)
     private String email;
 
     private String address;
@@ -29,7 +31,7 @@ public class Staff {
 
     private String password;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(name = "staff_roles",
             joinColumns = {
                     @JoinColumn(name = "staff_id", referencedColumnName = "id",
@@ -38,6 +40,14 @@ public class Staff {
                     @JoinColumn(name = "roles_id", referencedColumnName = "id",
                             nullable = false, updatable = false)})
     private List<Role> roles;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
     public String getPassword() {
         return password;

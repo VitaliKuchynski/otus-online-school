@@ -33,9 +33,9 @@ public class DBStaffServiceImpl implements DBStaffService, UserDetailsService {
 
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        Staff employee = staffRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("employee not found " + email));
+        Staff employee = staffRepository.findByName(username).orElseThrow(() -> new RuntimeException("employee not found " + username));
        // var role = roleRepository.findById().orElseThrow(()-> new RuntimeException("role not found " + roleId));
 
         Collection<SimpleGrantedAuthority> authorityCollections = new ArrayList<>();

@@ -19,10 +19,11 @@ public class Staff {
     private Long id;
 
     @Column(unique = true)
-    private String userName;
+    private String username;
 
     private String name;
 
+    @Column(unique = true)
     private String email;
 
     private String address;
@@ -31,7 +32,7 @@ public class Staff {
 
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "staff_roles",
             joinColumns = {
                     @JoinColumn(name = "staff_id", referencedColumnName = "id",
@@ -39,14 +40,16 @@ public class Staff {
             inverseJoinColumns = {
                     @JoinColumn(name = "roles_id", referencedColumnName = "id",
                             nullable = false, updatable = false)})
+    @JoinColumn(name = "role", referencedColumnName = "name",
+                            nullable = false, updatable = true)
     private List<Role> roles;
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {

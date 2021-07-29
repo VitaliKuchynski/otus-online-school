@@ -11,6 +11,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -25,18 +26,20 @@ public class DBStaffServiceImpl implements DBStaffService, UserDetailsService {
     private final StaffRepository staffRepository;
     private final RoleRepository roleRepository;
 
-    public DBStaffServiceImpl(TransactionManager transactionManager, StaffRepository staffRepository, RoleRepository roleRepository) {
+    private final PasswordEncoder passwordEncoder;
+
+    public DBStaffServiceImpl(TransactionManager transactionManager, StaffRepository staffRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.transactionManager = transactionManager;
         this.staffRepository = staffRepository;
         this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        Staff employee = staffRepository.findByName(username).orElseThrow(() -> new RuntimeException("employee not found " + username));
-       // var role = roleRepository.findById().orElseThrow(()-> new RuntimeException("role not found " + roleId));
+        Staff employee = staffRepository.findEmployeeByUsername(username).orElseThrow(() -> new RuntimeException("employee not found " + username));
 
         Collection<SimpleGrantedAuthority> authorityCollections = new ArrayList<>();
         var roles = employee.getRoles();
@@ -45,7 +48,7 @@ public class DBStaffServiceImpl implements DBStaffService, UserDetailsService {
             var roleById = roleRepository.findById(role.getId()).orElseThrow(()-> new RuntimeException("role not found " + role.getId()));
             authorityCollections.add(new SimpleGrantedAuthority(roleById.getName()));
         }
-        return new org.springframework.security.core.userdetails.User(employee.getEmail(), employee.getPassword(), authorityCollections);
+        return new org.springframework.security.core.userdetails.User(employee.getUsername(), employee.getPassword(), authorityCollections);
     }
 
 
@@ -55,9 +58,11 @@ public class DBStaffServiceImpl implements DBStaffService, UserDetailsService {
        var role = roleRepository.findById(roleId).orElseThrow(()-> new RuntimeException("role not found " + roleId));
 
         return transactionManager.doInTransaction(() -> {
-            if (staffRepository.findByEmail(staff.getEmail()).isPresent()) {
-                throw new RuntimeException("Employee with the same email already registered");
+            if (staffRepository.findEmployeeByUsername(staff.getUsername()).isPresent()) {
+                throw new RuntimeException("Employee with the same username already registered");
             }
+            staff.setPassword(passwordEncoder.encode(staff.getPassword()));
+
             staff.setRoles(Collections.singletonList(role));
 
             var savedEmployee = staffRepository.save(staff);

@@ -34,7 +34,7 @@ public class DBCourseServiceImpl implements DBCourseService {
     }
 
     @Override
-    public Optional<Course> getCourse(long id) {
+    public Optional<Course> getCourse(Long id) {
         Optional<Course> course = courseRepository.findById(id);
         log.info("course: {}", course);
         return course;
@@ -46,5 +46,12 @@ public class DBCourseServiceImpl implements DBCourseService {
         courseRepository.findAll().forEach(courseList::add);
         log.info("courseList:{}", courseList);
         return courseList;
+    }
+
+    @Override
+    public Optional<Course> findCourseByName(String name) {
+        Optional<Course> course = courseRepository.findCourseByName(name);
+        log.info("course: {}", course);
+        return course;
     }
 }

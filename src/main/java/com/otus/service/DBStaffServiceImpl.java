@@ -3,6 +3,7 @@ package com.otus.service;
 import com.otus.model.Role;
 import com.otus.model.Staff;
 import com.otus.model.Student;
+import com.otus.repository.CourseRepository;
 import com.otus.repository.RoleRepository;
 import com.otus.repository.StaffRepository;
 import com.otus.repository.StudentRepository;
@@ -25,15 +26,17 @@ public class DBStaffServiceImpl implements DBStaffService, UserDetailsService {
 
 
     private final TransactionManager transactionManager;
+    private final CourseRepository courseRepository;
     private final StaffRepository staffRepository;
     private final RoleRepository roleRepository;
     private final StudentRepository studentRepository;
 
     private final PasswordEncoder passwordEncoder;
 
-    public DBStaffServiceImpl(TransactionManager transactionManager, StaffRepository staffRepository,
+    public DBStaffServiceImpl(TransactionManager transactionManager, CourseRepository courseRepository, StaffRepository staffRepository,
                               RoleRepository roleRepository, StudentRepository studentRepository, PasswordEncoder passwordEncoder) {
         this.transactionManager = transactionManager;
+        this.courseRepository = courseRepository;
         this.staffRepository = staffRepository;
         this.roleRepository = roleRepository;
         this.studentRepository = studentRepository;
@@ -134,5 +137,17 @@ public class DBStaffServiceImpl implements DBStaffService, UserDetailsService {
             var savedEmployee = staffRepository.save(employee);
             log.info("updated employee role: {} ", savedEmployee);
             return savedEmployee;
+    }
+
+    @Override
+    public void assignCourse(String employeeUsername, String courseName) {
+       var employee = staffRepository.findEmployeeByUsername(employeeUsername)
+                .orElseThrow(()-> new RuntimeException("Employee not found " + employeeUsername));
+
+       var course = courseRepository.findCourseByName(courseName)
+                .orElseThrow(()-> new RuntimeException("Course not found " + courseName));
+
+       employee.getCourses().add(course);
+       staffRepository.save(employee);
     }
 }

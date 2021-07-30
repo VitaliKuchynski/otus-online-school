@@ -9,7 +9,9 @@ public interface DBCourseService {
 
     Course saveCourse(Course course);
 
-    Optional<Course> getCourse(long id);
+    Optional<Course> getCourse(Long id);
 
     List<Course> findAll();
+
+    Optional<Course> findCourseByName(String id);
 }

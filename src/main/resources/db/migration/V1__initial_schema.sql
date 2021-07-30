@@ -11,8 +11,8 @@ create table students (
 );
 
 create table students_roles (
-                             student_id bigint,
-                             roles_id bigint
+    student_id bigint,
+    roles_id bigint
 );
 
 create table courses (
@@ -52,6 +52,12 @@ create table staff_roles (
     roles_id bigint
 );
 insert into staff_roles values (1 , 1);
+
+create table staff_courses (
+    staff_id bigint,
+    course_id bigint
+
+);
 
 create table payments (
     id bigserial not null,

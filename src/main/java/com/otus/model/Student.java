@@ -46,8 +46,6 @@ public class Student {
             inverseJoinColumns = {
                     @JoinColumn(name = "roles_id", referencedColumnName = "id",
                             nullable = false, updatable = false)})
-    @JoinColumn(name = "role", referencedColumnName = "name",
-                                  nullable = false, updatable = false)
     private Set<Role> roles = new HashSet<>();
 
 

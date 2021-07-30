@@ -19,11 +19,23 @@ public class Course {
     @JsonIgnore
     private Set<Student> students = new HashSet<>();
 
+    @ManyToMany(mappedBy = "courses",fetch = FetchType.EAGER)
+    @JsonIgnore
+    private Set<Staff> teachers = new HashSet<>();
+
     public Course(String name) {
         this.name = name;
     }
 
     public Course() {
+    }
+
+    public Set<Staff> getTeachers() {
+        return teachers;
+    }
+
+    public void setTeachers(Set<Staff> teachers) {
+        this.teachers = teachers;
     }
 
     public Long getId() {

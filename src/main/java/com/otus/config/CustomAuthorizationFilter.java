@@ -25,6 +25,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
+
     private static final Logger log = LoggerFactory.getLogger(CustomAuthorizationFilter.class);
 
     @Override

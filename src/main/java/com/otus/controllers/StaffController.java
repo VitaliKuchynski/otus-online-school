@@ -2,6 +2,7 @@ package com.otus.controllers;
 
 import com.otus.model.Staff;
 import com.otus.service.DBStaffService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,7 +35,13 @@ public class StaffController {
     }
 
     @PostMapping(value = "assign/role",consumes = "application/json", produces = "application/json")
-    public Staff saveEmployee(@RequestParam(name = "employeeId")Long employeeId, @RequestParam(name = "roleID") Long roleId) {
+    public Staff assignRoleToEmployee(@RequestParam(name = "employeeId")Long employeeId, @RequestParam(name = "roleID") Long roleId) {
         return dbStaffService.assignRole(employeeId,roleId);
+    }
+
+    @PostMapping(value = "assign/course",consumes = "application/json", produces = "application/json")
+    public ResponseEntity<?> assignCourseToEmployee(@RequestParam(name = "employeeUsername")String employeeUsername, @RequestParam(name = "courseName") String courseName) {
+         dbStaffService.assignCourse(employeeUsername, courseName);
+         return ResponseEntity.ok().build();
     }
 }

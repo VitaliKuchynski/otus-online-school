@@ -1,10 +1,18 @@
 create table students (
     id bigserial primary key,
+    username varchar (100) not null,
     name varchar(100) not null,
     email varchar (100) not null,
     address varchar (100) not null,
     phone varchar (100) not null,
-    card_number varchar (100) not null
+    password varchar (100),
+    card_number varchar (100) not null,
+    role varchar (100)
+);
+
+create table students_roles (
+                             student_id bigint,
+                             roles_id bigint
 );
 
 create table courses (
@@ -23,6 +31,7 @@ create table roles (
 );
 
 insert into roles values (1, 'ADMIN');
+insert into roles values (2, 'USER');
 
 create table staff (
     id bigserial primary key,
@@ -36,7 +45,7 @@ create table staff (
 );
 insert into staff values (1, 'Valera_Admin', 'Valera Semenov', 'vradmin@gmail.com', 'Big street', '2656412452', '$2a$10$CaHCsMuqcadtunrTssEN8ur4/5YLWyvfE1sHWFrMRHwNbA4cOsx9W', 'ADMIN');
 
-CREATE SEQUENCE hibernate_sequence START 2;
+CREATE SEQUENCE hibernate_sequence START 3;
 
 create table staff_roles (
     staff_id bigint,

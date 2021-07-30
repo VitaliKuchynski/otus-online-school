@@ -4,13 +4,16 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
-@Table(name = "students")
+@Entity(name = "students")
+
 public class Student {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(unique = true)
+    private String username;
 
     private String name;
 
@@ -21,9 +24,11 @@ public class Student {
 
     private String phone;
 
+    private String password;
+
     private String cardNumber;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "students_courses",
             joinColumns = {
                     @JoinColumn(name = "student_id", referencedColumnName = "id",
@@ -33,15 +38,41 @@ public class Student {
                             nullable = false, updatable = false)})
     private Set<Course> courses = new HashSet<>();
 
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "students_roles",
+            joinColumns = {
+                    @JoinColumn(name = "student_id", referencedColumnName = "id",
+                            nullable = false, updatable = false)},
+            inverseJoinColumns = {
+                    @JoinColumn(name = "roles_id", referencedColumnName = "id",
+                            nullable = false, updatable = false)})
+    @JoinColumn(name = "role", referencedColumnName = "name",
+                                  nullable = false, updatable = false)
+    private Set<Role> roles = new HashSet<>();
 
-    public Student(String name, String email, String address, String phone) {
-        this.name = name;
-        this.email = email;
-        this.address = address;
-        this.phone = phone;
+
+    public String getUsername() {
+        return username;
     }
 
-    public Student() {
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     public Long getId() {

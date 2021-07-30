@@ -1,17 +1,11 @@
 package com.otus.model;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 import javax.persistence.*;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 
-@Entity
-@Table(name = "staff")
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
+@Entity(name = "staff")
 public class Staff {
 
     @Id
@@ -41,8 +35,8 @@ public class Staff {
                     @JoinColumn(name = "roles_id", referencedColumnName = "id",
                             nullable = false, updatable = false)})
     @JoinColumn(name = "role", referencedColumnName = "name",
-                            nullable = false, updatable = true)
-    private List<Role> roles;
+                                    nullable = false, updatable = false)
+    private Set<Role> roles = new HashSet<>();
 
     public String getUsername() {
         return username;
@@ -60,11 +54,11 @@ public class Staff {
         this.password = password;
     }
 
-    public List<Role> getRoles() {
+    public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<Role> roles) {
+    public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
 

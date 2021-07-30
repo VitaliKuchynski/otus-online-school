@@ -1,7 +1,5 @@
 package com.otus.controllers;
 
-import com.otus.model.Course;
-import com.otus.model.Role;
 import com.otus.model.Staff;
 import com.otus.service.DBStaffService;
 import org.springframework.web.bind.annotation.*;

@@ -1,16 +1,11 @@
 package com.otus.model;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 @Entity(name = "roles")
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
 public class Role {
 
     @Id
@@ -21,13 +16,17 @@ public class Role {
 
     @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
     @JsonIgnore
-    private List<Staff> staff;
+    private Set<Staff> staff;
 
-    public List<Staff> getStaff() {
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
+    @JsonIgnore
+    private Set<Student> student;
+
+    public Set<Staff> getStaff() {
         return staff;
     }
 
-    public void setStaff(List<Staff> staff) {
+    public void setStaff(Set<Staff> staff) {
         this.staff = staff;
     }
 
@@ -36,6 +35,14 @@ public class Role {
     }
 
     public Role() {
+    }
+
+    public Set<Student> getStudent() {
+        return student;
+    }
+
+    public void setStudent(Set<Student> student) {
+        this.student = student;
     }
 
     public Long getId() {

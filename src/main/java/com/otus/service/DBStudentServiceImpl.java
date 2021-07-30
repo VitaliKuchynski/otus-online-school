@@ -2,13 +2,16 @@ package com.otus.service;
 
 import com.otus.model.Student;
 import com.otus.repository.CourseRepository;
+import com.otus.repository.RoleRepository;
 import com.otus.repository.StudentRepository;
 import com.otus.sessionManager.TransactionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,21 +23,30 @@ public class DBStudentServiceImpl implements DBStudentService {
     private final TransactionManager transactionManager;
     private final StudentRepository studentRepository;
     private final CourseRepository courseRepository;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public DBStudentServiceImpl(TransactionManager transactionManager, StudentRepository studentRepository, CourseRepository courseRepository) {
+    public DBStudentServiceImpl(TransactionManager transactionManager, StudentRepository studentRepository, CourseRepository courseRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.transactionManager = transactionManager;
         this.studentRepository = studentRepository;
         this.courseRepository = courseRepository;
+        this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public Student saveStudent(Student student) {
         return transactionManager.doInTransaction(() -> {
-            if(studentRepository.findByEmail(student.getEmail()).isPresent()){
-                throw new RuntimeException("Student with the same email already registered");
+            if(studentRepository.findStudentByUsername(student.getUsername()).isPresent()){
+                throw new RuntimeException("Student with the same username already registered");
             }
+            var defaultRole =  roleRepository.findById(2L).orElseThrow(() -> new RuntimeException("Role not found, id:" + 2));
+
+            student.setPassword(passwordEncoder.encode(student.getPassword()));
+            student.setRoles(Collections.singleton(defaultRole));
+
             var savedStudent = studentRepository.save(student);
-            log.info("saved client: {}", savedStudent);
+            log.info("saved student: {}", savedStudent);
             return savedStudent;
         });
     }

@@ -22,8 +22,8 @@ public class StudentController {
     }
 
 
-    @PostMapping(value = "/create", consumes = "application/json", produces = "application/json")
-    public Student createStudent(@RequestBody Student student) {
+    @PostMapping(value = "/save", consumes = "application/json", produces = "application/json")
+    public Student saveStudent(@RequestBody Student student) {
         dbStudentService.saveStudent(student);
         return student;
     }

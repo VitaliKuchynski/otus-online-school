@@ -1,8 +1,5 @@
 package com.otus.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,7 +12,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
@@ -46,10 +42,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(STATELESS);
         http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/role/create").hasAnyAuthority("ADMIN");
-        http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/role/getAll").hasAnyAuthority("TEACHER");
+        http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/role/*").hasAnyAuthority("ADMIN");
+        http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/student/save").hasAnyAuthority("ADMIN");
+        http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/student/*").hasAnyAuthority("ADMIN");
         http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/employee/save").hasAnyAuthority("ADMIN");
-
-
+        http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/employee/assign/role").hasAnyAuthority("ADMIN");
+        http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/employee/*").hasAnyAuthority("ADMIN");
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean()));
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);

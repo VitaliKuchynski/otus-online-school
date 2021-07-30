@@ -3,7 +3,6 @@ package com.otus.model;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-
 @Entity(name = "payments")
 public class Payment {
 

@@ -14,6 +14,8 @@ public interface DBStudentService {
 
     List<Student> findAll();
 
-    Student assignCourse(Long studentId, Long courseId);
+    Student assignStudentToCourse(Long studentId, Long courseId);
+
+    Student updateStudent (Student student, Long id);
 
 }

@@ -5,7 +5,6 @@ import com.otus.service.DBCourseService;
 import com.otus.service.DBStudentService;
 import org.springframework.web.bind.annotation.*;
 
-import javax.websocket.server.PathParam;
 import java.util.List;
 
 @RestController
@@ -42,6 +41,6 @@ public class StudentController {
 
     @PostMapping(value = "/assign/course", consumes = "application/json", produces = "application/json")
     public Student assignCourse(@RequestParam (name = "studentId") Long studentId, @RequestParam (name = "courseId") Long courseId) {
-        return dbStudentService.assignCourse(studentId, courseId);
+        return dbStudentService.assignStudentToCourse(studentId, courseId);
 }
 }

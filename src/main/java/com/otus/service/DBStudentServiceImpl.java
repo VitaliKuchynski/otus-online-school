@@ -67,7 +67,7 @@ public class DBStudentServiceImpl implements DBStudentService {
     }
 
     @Override
-    public Student assignCourse(Long studentId, Long courseId) {
+    public Student assignStudentToCourse(Long studentId, Long courseId) {
 
         var getCourse = courseRepository.findById(courseId)
                 .orElseThrow(()-> new RuntimeException("course not found " + courseId));
@@ -78,7 +78,39 @@ public class DBStudentServiceImpl implements DBStudentService {
         var course = student.getCourses();
         course.add(getCourse);
         student.setCourses(course);
-
         return studentRepository.save(student);
     }
+
+    @Override
+    public Student updateStudent(Student student, Long id) {
+         return transactionManager.doInTransaction(() -> {
+
+            if(studentRepository.findById(id).isPresent()){
+//                throw new RuntimeException("Student with the same username already registered");
+                var newStudent =  studentRepository.findById(id)
+                        .orElseThrow(() -> new RuntimeException("Role not found, id:" + id));
+                newStudent.setUsername(student.getUsername());
+                newStudent.setName(student.getName());
+                newStudent.setEmail(student.getEmail());
+                newStudent.setAddress(student.getAddress());
+                newStudent.setPhone(student.getPhone());
+                newStudent.setCardNumber(student.getCardNumber());
+                newStudent.setCourses(student.getCourses());
+                newStudent.setRoles(student.getRoles());
+                var savedStudent =  studentRepository.save(newStudent);
+
+                if (studentRepository.findById(savedStudent.getId()).isPresent()){
+                    log.info("updated student: {}", savedStudent);
+                    return savedStudent;
+                }
+
+            }
+
+            var savedStudent = studentRepository.save(student);
+            log.info("saved student: {}", savedStudent);
+            return savedStudent;
+        });
+    }
+
+
 }

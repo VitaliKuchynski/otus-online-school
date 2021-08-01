@@ -1,6 +1,5 @@
 package com.otus.service;
 
-import com.otus.model.Staff;
 import com.otus.model.Student;
 
 import java.util.List;
@@ -16,6 +15,6 @@ public interface DBStudentService {
 
     Student assignStudentToCourse(Long studentId, Long courseId);
 
-    Student updateStudent (Student student, Long id);
+    Student updateStudent(Student student, Long id);
 
 }

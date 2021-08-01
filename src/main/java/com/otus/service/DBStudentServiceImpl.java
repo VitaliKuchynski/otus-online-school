@@ -83,12 +83,13 @@ public class DBStudentServiceImpl implements DBStudentService {
 
     @Override
     public Student updateStudent(Student student, Long id) {
+
          return transactionManager.doInTransaction(() -> {
 
             if(studentRepository.findById(id).isPresent()){
-//                throw new RuntimeException("Student with the same username already registered");
+
                 var newStudent =  studentRepository.findById(id)
-                        .orElseThrow(() -> new RuntimeException("Role not found, id:" + id));
+                        .orElseThrow(() -> new RuntimeException("Student not found, id:" + id));
                 newStudent.setUsername(student.getUsername());
                 newStudent.setName(student.getName());
                 newStudent.setEmail(student.getEmail());
@@ -102,15 +103,10 @@ public class DBStudentServiceImpl implements DBStudentService {
                 if (studentRepository.findById(savedStudent.getId()).isPresent()){
                     log.info("updated student: {}", savedStudent);
                     return savedStudent;
-                }
-
+                } else
+                    throw new RuntimeException("Student not updated, name:" + savedStudent);
             }
-
-            var savedStudent = studentRepository.save(student);
-            log.info("saved student: {}", savedStudent);
-            return savedStudent;
-        });
+                    throw new RuntimeException("Student not found, id:" + id);
+         });
     }
-
-
 }

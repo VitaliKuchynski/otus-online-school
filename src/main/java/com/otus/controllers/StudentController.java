@@ -42,5 +42,10 @@ public class StudentController {
     @PostMapping(value = "/assign/course", consumes = "application/json", produces = "application/json")
     public Student assignCourse(@RequestParam (name = "studentId") Long studentId, @RequestParam (name = "courseId") Long courseId) {
         return dbStudentService.assignStudentToCourse(studentId, courseId);
-}
+    }
+
+    @PutMapping(value = "/update/{id}", consumes = "application/json", produces = "application/json")
+    public Student saveStudent(@RequestBody Student student,@PathVariable(name = "id") Long id) {
+        return dbStudentService.updateStudent(student, id);
+    }
 }

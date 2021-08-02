@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
+
 @Entity(name = "courses")
 public class Course {
 
@@ -19,15 +20,27 @@ public class Course {
     @JsonIgnore
     private Set<Student> students = new HashSet<>();
 
-    @ManyToMany(mappedBy = "courses",fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "courses", fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<Staff> teachers = new HashSet<>();
+
+    @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
+    @JsonIgnore
+    Set<Payment> payments = new HashSet<>();
 
     public Course(String name) {
         this.name = name;
     }
 
     public Course() {
+    }
+
+    public Set<Payment> getPayments() {
+        return payments;
+    }
+
+    public void setPayments(Set<Payment> payments) {
+        this.payments = payments;
     }
 
     public Set<Staff> getTeachers() {

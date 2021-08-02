@@ -1,7 +1,6 @@
 package com.otus.controllers;
 
 import com.otus.model.Course;
-import com.otus.model.Student;
 import com.otus.service.DBCourseService;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,8 +24,8 @@ public class CourseController {
 
     @GetMapping("/{id}")
     public Course getCourse(@PathVariable(value = "id") long id) {
-       return dbCourseService.getCourse(id).
-                orElseThrow(()-> new RuntimeException("course not found " + id));
+        return dbCourseService.getCourse(id).
+                orElseThrow(() -> new RuntimeException("course not found " + id));
     }
 
     @GetMapping("/all")

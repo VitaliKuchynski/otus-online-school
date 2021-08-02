@@ -29,7 +29,7 @@ public class DBRoleServiceImpl implements DBRoleService {
     public Role saveRole(Role role) {
         return transactionManager.doInTransaction(() -> {
             var savedRole = roleRepository.save(role);
-            log.info ("saved role: {}", savedRole);
+            log.info("saved role: {}", savedRole);
             return savedRole;
         });
     }

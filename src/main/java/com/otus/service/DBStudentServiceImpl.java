@@ -37,10 +37,10 @@ public class DBStudentServiceImpl implements DBStudentService {
     @Override
     public Student saveStudent(Student student) {
         return transactionManager.doInTransaction(() -> {
-            if(studentRepository.findStudentByUsername(student.getUsername()).isPresent()){
+            if (studentRepository.findStudentByUsername(student.getUsername()).isPresent()) {
                 throw new RuntimeException("Student with the same username already registered");
             }
-            var defaultRole =  roleRepository.findById(2L).orElseThrow(() -> new RuntimeException("Role not found, id:" + 2));
+            var defaultRole = roleRepository.findById(2L).orElseThrow(() -> new RuntimeException("Role not found, id:" + 2));
 
             student.setPassword(passwordEncoder.encode(student.getPassword()));
             student.setRoles(Collections.singleton(defaultRole));
@@ -70,10 +70,10 @@ public class DBStudentServiceImpl implements DBStudentService {
     public Student assignStudentToCourse(Long studentId, Long courseId) {
 
         var getCourse = courseRepository.findById(courseId)
-                .orElseThrow(()-> new RuntimeException("course not found " + courseId));
+                .orElseThrow(() -> new RuntimeException("course not found " + courseId));
 
         var student = studentRepository.findById(studentId)
-                .orElseThrow(()-> new RuntimeException("student not found " + studentId));
+                .orElseThrow(() -> new RuntimeException("student not found " + studentId));
 
         var course = student.getCourses();
         course.add(getCourse);
@@ -84,11 +84,11 @@ public class DBStudentServiceImpl implements DBStudentService {
     @Override
     public Student updateStudent(Student student, Long id) {
 
-         return transactionManager.doInTransaction(() -> {
+        return transactionManager.doInTransaction(() -> {
 
-            if(studentRepository.findById(id).isPresent()){
+            if (studentRepository.findById(id).isPresent()) {
 
-                var newStudent =  studentRepository.findById(id)
+                var newStudent = studentRepository.findById(id)
                         .orElseThrow(() -> new RuntimeException("Student not found, id:" + id));
                 newStudent.setUsername(student.getUsername());
                 newStudent.setName(student.getName());
@@ -98,15 +98,16 @@ public class DBStudentServiceImpl implements DBStudentService {
                 newStudent.setCardNumber(student.getCardNumber());
                 newStudent.setCourses(student.getCourses());
                 newStudent.setRoles(student.getRoles());
-                var savedStudent =  studentRepository.save(newStudent);
+                newStudent.setPayments(student.getPayments());
+                var savedStudent = studentRepository.save(newStudent);
 
-                if (studentRepository.findById(savedStudent.getId()).isPresent()){
+                if (studentRepository.findById(savedStudent.getId()).isPresent()) {
                     log.info("updated student: {}", savedStudent);
                     return savedStudent;
                 } else
                     throw new RuntimeException("Student not updated, name:" + savedStudent);
             }
-                    throw new RuntimeException("Student not found, id:" + id);
-         });
+            throw new RuntimeException("Student not found, id:" + id);
+        });
     }
 }

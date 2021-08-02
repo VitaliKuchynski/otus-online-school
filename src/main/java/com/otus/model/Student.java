@@ -17,7 +17,6 @@ public class Student {
 
     private String name;
 
-    @Column(unique = true)
     private String email;
 
     private String address;
@@ -48,6 +47,16 @@ public class Student {
                             nullable = false, updatable = false)})
     private Set<Role> roles = new HashSet<>();
 
+    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
+    Set<Payment> payments = new HashSet<>();
+
+    public Set<Payment> getPayments() {
+        return payments;
+    }
+
+    public void setPayments(Set<Payment> payments) {
+        this.payments = payments;
+    }
 
     public String getUsername() {
         return username;

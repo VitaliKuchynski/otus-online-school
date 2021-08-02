@@ -9,7 +9,7 @@ public interface DBStudentService {
 
     Student saveStudent(Student student);
 
-    Optional <Student> getStudent(long id);
+    Optional<Student> getStudent(long id);
 
     List<Student> findAll();
 

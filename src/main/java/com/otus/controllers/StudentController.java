@@ -45,7 +45,7 @@ public class StudentController {
     }
 
     @PutMapping(value = "/update/{id}", consumes = "application/json", produces = "application/json")
-    public Student saveStudent(@RequestBody Student student,@PathVariable(name = "id") Long id) {
+    public Student updateStudent(@RequestBody Student student,@PathVariable(name = "id") Long id) {
         return dbStudentService.updateStudent(student, id);
     }
 }

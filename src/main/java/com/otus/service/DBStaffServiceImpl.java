@@ -93,8 +93,8 @@ public class DBStaffServiceImpl implements DBStaffService, UserDetailsService {
     @Override
     public Staff saveEmployee(Staff staff, Long roleId) {
 
-       var role = roleRepository.findById(roleId)
-               .orElseThrow(()-> new RuntimeException("role not found " + roleId));
+        var role = roleRepository.findById(roleId)
+                .orElseThrow(() -> new RuntimeException("role not found " + roleId));
 
         return transactionManager.doInTransaction(() -> {
             if (staffRepository.findEmployeeByUsername(staff.getUsername()).isPresent()) {
@@ -126,28 +126,28 @@ public class DBStaffServiceImpl implements DBStaffService, UserDetailsService {
 
     @Override
     public Staff assignRole(Long employeeID, Long roleId) {
-            var employee = staffRepository.findById(employeeID)
-                    .orElseThrow(()-> new RuntimeException("role not found " + employeeID));
-            var role = roleRepository.findById(roleId)
-                    .orElseThrow(()-> new RuntimeException("role not found " + roleId));
+        var employee = staffRepository.findById(employeeID)
+                .orElseThrow(() -> new RuntimeException("role not found " + employeeID));
+        var role = roleRepository.findById(roleId)
+                .orElseThrow(() -> new RuntimeException("role not found " + roleId));
 
-            var roles =  employee.getRoles();
-            roles.add(role);
-            employee.setRoles(roles);
-            var savedEmployee = staffRepository.save(employee);
-            log.info("updated employee role: {} ", savedEmployee);
-            return savedEmployee;
+        var roles = employee.getRoles();
+        roles.add(role);
+        employee.setRoles(roles);
+        var savedEmployee = staffRepository.save(employee);
+        log.info("updated employee role: {} ", savedEmployee);
+        return savedEmployee;
     }
 
     @Override
     public void assignCourse(String employeeUsername, String courseName) {
-       var employee = staffRepository.findEmployeeByUsername(employeeUsername)
-                .orElseThrow(()-> new RuntimeException("Employee not found " + employeeUsername));
+        var employee = staffRepository.findEmployeeByUsername(employeeUsername)
+                .orElseThrow(() -> new RuntimeException("Employee not found " + employeeUsername));
 
-       var course = courseRepository.findCourseByName(courseName)
-                .orElseThrow(()-> new RuntimeException("Course not found " + courseName));
+        var course = courseRepository.findCourseByName(courseName)
+                .orElseThrow(() -> new RuntimeException("Course not found " + courseName));
 
-       employee.getCourses().add(course);
-       staffRepository.save(employee);
+        employee.getCourses().add(course);
+        staffRepository.save(employee);
     }
 }

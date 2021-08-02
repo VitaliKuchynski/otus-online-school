@@ -1,6 +1,9 @@
 package com.otus.service;
 
+import com.otus.model.Course;
 import com.otus.model.Payment;
+import com.otus.model.Student;
+import com.otus.repository.CourseRepository;
 import com.otus.repository.PaymentRepository;
 import com.otus.sessionManager.TransactionManager;
 import org.slf4j.Logger;
@@ -18,10 +21,14 @@ public class DBPaymentServiceImpl implements DBPaymentsService {
 
     private final TransactionManager transactionManager;
     private final PaymentRepository paymentRepository;
+    private final CourseRepository courseRepository;
+    private final DBStudentService dbStudentService;
 
-    public DBPaymentServiceImpl(TransactionManager transactionManager, PaymentRepository paymentRepository) {
+    public DBPaymentServiceImpl(TransactionManager transactionManager, PaymentRepository paymentRepository, CourseRepository courseRepository, DBStudentService dbStudentService) {
         this.transactionManager = transactionManager;
         this.paymentRepository = paymentRepository;
+        this.courseRepository = courseRepository;
+        this.dbStudentService = dbStudentService;
     }
 
     @Override
@@ -44,7 +51,28 @@ public class DBPaymentServiceImpl implements DBPaymentsService {
     public List<Payment> findAll() {
         var paymentList = new ArrayList<Payment>();
         paymentRepository.findAll().forEach(paymentList::add);
-        log.info("paymentList: {} ", paymentList);
+        log.info("paymentList: {}", paymentList);
         return paymentList;
+    }
+
+    @Override
+    public Payment pay(Long studentId, Long courseId) {
+        return transactionManager.doInTransaction(() -> {
+            Optional<Student> student = dbStudentService.getStudent(studentId);
+            Optional<Course> course = courseRepository.findById(courseId);
+
+            if (student.isPresent() && course.isPresent()) {
+                Payment payment = new Payment(course.get(), student.get());
+                paymentRepository.save(payment);
+                student.get().getCourses().add(course.get());
+                dbStudentService.updateStudent(student.get(), studentId);
+                log.info("payment processed: {} ", payment.getId());
+                return payment;
+            }
+
+            log.info("payment failed:");
+            return null;
+        });
+
     }
 }

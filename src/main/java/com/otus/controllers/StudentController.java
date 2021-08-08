@@ -1,7 +1,6 @@
 package com.otus.controllers;
 
 import com.otus.model.Student;
-import com.otus.service.DBCourseService;
 import com.otus.service.DBStudentService;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,13 +10,10 @@ import java.util.List;
 @RequestMapping("/api/student")
 public class StudentController {
 
-    private DBStudentService dbStudentService;
-    private DBCourseService dbCourseService;
+    private final DBStudentService dbStudentService;
 
-
-    public StudentController(DBStudentService dbStudentService, DBCourseService dbCourseService) {
+    public StudentController(DBStudentService dbStudentService) {
         this.dbStudentService = dbStudentService;
-        this.dbCourseService = dbCourseService;
     }
 
 

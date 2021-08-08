@@ -71,7 +71,7 @@ public class DBPaymentServiceImpl implements DBPaymentsService {
             }
 
             log.info("payment failed:");
-            return null;
+            throw new RuntimeException("Payment failed");
         });
 
     }

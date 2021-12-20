@@ -1,0 +1,6 @@
+app:
+  datasource:
+    postgres-db:
+      jdbcUrl: jdbc:postgresql://localhost:5430/postgresDB
+      username: usr
+      password: pwd
